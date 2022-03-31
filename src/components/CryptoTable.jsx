@@ -10,7 +10,7 @@ import Paper from "@mui/material/Paper";
 
 import { useTable } from "react-table";
 
-import Filters from "./Filters";
+import Filters from "../sections/Filters";
 
 const CryptoCustomCell = ({
   value: initialValue,
@@ -24,11 +24,13 @@ const CryptoCustomCell = ({
     return (
       <>
         <img
-          style={{ width: "5%", minWidth: "3vh",height:"auto" }}
+          style={{ width: "5%", minWidth: "3vh", height: "auto" }}
           src={row.original.image}
           alt="crypto"
         />
-        <span><b>{row.original.name}</b></span>
+        <span>
+          <b>{row.original.name}</b>
+        </span>
       </>
     );
   }

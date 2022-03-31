@@ -1,107 +1,46 @@
-import React from 'react'
+import React from 'react';
+import './App.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { UserContext } from './hooks/UserContext';
+import PrivateRoute from './pages/PrivateRoute';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Landing from './pages/Landing';
+import Home from './pages/Home';
+import NotFound from './pages/NotFound';
+import useFindUser from './hooks/useFindUser';
+// import RunCode from './pages/RunCode';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import Navbar from './components/Navbar';
-import CryptoTable from './components/CryptoTable';
-import axios from 'axios';
 
-
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 function App() {
 
-  const columnsCrypto = React.useMemo(
-    () => [
-      {
-        Header: 'Name',
-        accessor: 'name',
-        canFilter: true,
-      },
-      {
-        Header: 'Symbol',
-        accessor: 'symbol',
-      },
-      {
-        Header: 'Price',
-        accessor: 'current',
-      },
-      {
-        Header: '24h High',
-        accessor: 'high_1d',
-      },
-      {
-        Header: '24h Low',
-        accessor: 'low_1d',
-      },
-      {
-        Header: "Last 24 Hours",
-        accessor: "last_24h",
-      }
-
-    ],
-    []
-  )
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Name',
-        columns: [
-          {
-            Header: 'First Name',
-            accessor: 'firstName',
-          },
-          {
-            Header: 'Last Name',
-            accessor: 'lastName',
-          },
-        ],
-      },
-      {
-        Header: 'Info',
-        columns: [
-          {
-            Header: 'Age',
-            accessor: 'age',
-          },
-          {
-            Header: 'Visits',
-            accessor: 'visits',
-          },
-          {
-            Header: 'Status',
-            accessor: 'status',
-          },
-          {
-            Header: 'Profile Progress',
-            accessor: 'progress',
-          },
-        ],
-      },
-    ],
-    []
-  )
-
-  // const data = React.useMemo(() => makeData(20), [])
-  const [data, setData] = React.useState([]);
-
-  React.useEffect(() => {
-    axios.get("http://localhost:7000/coins", {
-      params: {
-        currency: "usd",
-        limit: 15
-      }
-    }).then(res => {
-      setData(res.data);
-    })
-  }, [])
-
-
+  const {
+    user,
+    setUser,
+    isLoading } = useFindUser();
 
   return (
-    <div>
-      {/* material ui navbar */}
-      <Navbar />
-      <CryptoTable columns={columnsCrypto} data={data} />
-    </div>
-  )
+    <ThemeProvider theme={theme}>
+
+      <Router>
+        <UserContext.Provider value={{ user, setUser, isLoading }}>
+          <Switch>
+            <Route path="/register" component={Register} />
+            <Route path="/login" component={Login} />
+            <PrivateRoute exact path="/" component={Home} />
+            <Route component={NotFound} />
+          </Switch>
+        </UserContext.Provider>
+      </Router>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
