@@ -1,18 +1,18 @@
 import * as React from "react";
+import { Link, Redirect } from "react-router-dom";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { Link, Redirect } from "react-router-dom";
+
 import useForm from "../hooks/useForm";
 import useAuth from "../hooks/useAuth";
-import Error from "../components/Error";
 import { UserContext } from "../hooks/UserContext";
 
 export default function Login() {
@@ -98,9 +98,9 @@ export default function Login() {
                 onChange={handleChange}
               />
               {/* <FormControlLabel
-                                control={<Checkbox value="remember" color="primary" />}
-                                label="Remember me"
-                            /> */}
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
+              /> */}
               <Button
                 type="submit"
                 fullWidth

@@ -1,6 +1,9 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import { UserContext } from './hooks/UserContext';
 import PrivateRoute from './pages/PrivateRoute';
 import Register from './pages/Register';
@@ -8,8 +11,6 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import useFindUser from './hooks/useFindUser';
-// import RunCode from './pages/RunCode';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 const theme = createTheme({

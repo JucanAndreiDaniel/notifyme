@@ -1,11 +1,13 @@
 import React from "react";
 import axios from "axios";
-import Header from "../sections/Header";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import GlobalStyles from "@mui/material/GlobalStyles";
+
 import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import GlobalStyles from "@mui/material/GlobalStyles";
+import Typography from "@mui/material/Typography";
+
 import CryptoTable from "../components/CryptoTable";
+import Header from "../sections/Header";
 import pathString from "../PathString";
 
 export default function Home() {

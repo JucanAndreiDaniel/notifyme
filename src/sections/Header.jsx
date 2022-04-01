@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
-import * as React from "react";
+import React from "react";
+import { Link,useHistory } from "react-router-dom";
+
 import AddIcon from "@mui/icons-material/Add";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
@@ -9,9 +10,9 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+
 import { UserContext } from "../hooks/UserContext";
 import useLogout from "../hooks/useLogout";
-import { useHistory } from "react-router-dom";
 
 export default function Header() {
   const history = useHistory();

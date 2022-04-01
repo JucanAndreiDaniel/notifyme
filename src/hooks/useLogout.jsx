@@ -1,5 +1,6 @@
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+
 import pathString from "../PathString";
 
 export default function useLogout() {

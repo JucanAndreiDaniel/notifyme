@@ -1,8 +1,9 @@
 import React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import GlobalStyles from "@mui/material/GlobalStyles";
+
 import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import GlobalStyles from "@mui/material/GlobalStyles";
+import Typography from "@mui/material/Typography";
 
 import Header from "../sections/Header";
 
