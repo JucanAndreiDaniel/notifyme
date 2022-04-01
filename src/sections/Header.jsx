@@ -19,6 +19,11 @@ export default function Header() {
   const { user } = React.useContext(UserContext);
   const { logoutUser } = useLogout();
 
+  // use history to navigate to notification page
+  const handleNotificationClick = () => {
+    history.push("/notifications");
+  };
+
   const [currencyList, setCurrencyList] = React.useState([
     {
       currency: "USD",
@@ -190,8 +195,8 @@ export default function Header() {
                 "aria-labelledby": "user-button",
               }}
             >
-              <MenuItem onClick={handleUserDropdownCloseClick}>
-                Profile
+              <MenuItem onClick={handleNotificationClick}>
+                Notifications
               </MenuItem>
               <MenuItem onClick={logoutUser}>Logout</MenuItem>
             </Menu>
