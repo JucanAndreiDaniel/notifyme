@@ -16,6 +16,17 @@ import useFindUser from './hooks/useFindUser';
 const theme = createTheme({
   palette: {
     mode: 'dark',
+    primary: {
+      main: '#efb66e',
+    },
+    secondary: {
+      main: '#4a73fa',
+    },
+    background: {
+      lighter: '#302f35',
+      default: '#2c2c2c',
+    },
+    divider: '#efb66e',
   },
 });
 
@@ -28,7 +39,6 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-
       <Router>
         <UserContext.Provider value={{ user, setUser, isLoading }}>
           <Switch>
