@@ -18,7 +18,6 @@ const CryptoCustomCell = ({
   column: { id },
   updateMyData, // This is a custom function that we supplied to our table instance
 }) => {
-  const [value, setValue] = React.useState(initialValue);
 
   if (id === "name") {
     return (
@@ -44,11 +43,9 @@ const defaultColumn = {
 export default function CryptoTable({ columns, data }) {
   const {
     getTableProps,
-    getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-    state,
   } = useTable({
     columns,
     data,

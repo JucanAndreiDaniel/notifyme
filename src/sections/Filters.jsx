@@ -8,19 +8,35 @@ export default function Filters(props) {
     props.setName(event.target.value);
   };
   return (
-    <Grid container>
+    <Grid
+      container
+      direction="row"
+      justifyContent="flex-start"
+      alignItems="center"
+      rowSpacing={1}
+    >
+      <Grid item>
+        <Button
+          variant="contained"
+          color="primary"
+          // size="large"
+          style={{ marginLeft: 10 }}
+          onClick={props.handleOpen}
+        >
+          Favorite
+        </Button>
+      </Grid>
 
       <Grid item>
-
         <TextField
-        sx={{
+          sx={{
             width: "100%",
             marginTop: "1rem",
             marginBottom: "1rem",
             marginLeft: "1rem",
             marginRight: "1rem",
-
-        }}
+          }}
+          size="small"
           label="Search"
           variant="outlined"
           value={props.name}

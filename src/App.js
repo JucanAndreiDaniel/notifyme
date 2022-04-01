@@ -5,7 +5,6 @@ import { UserContext } from './hooks/UserContext';
 import PrivateRoute from './pages/PrivateRoute';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import Landing from './pages/Landing';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import useFindUser from './hooks/useFindUser';
