@@ -1,5 +1,5 @@
 import React from "react";
-import { Link,useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import AddIcon from "@mui/icons-material/Add";
 import AppBar from "@mui/material/AppBar";
@@ -18,9 +18,25 @@ export default function Header() {
   const history = useHistory();
   const { user } = React.useContext(UserContext);
   const { logoutUser } = useLogout();
-  const runCode = () => {
-    history.push("/code");
-  };
+
+  const [currencyList, setCurrencyList] = React.useState([
+    {
+      currency: "USD",
+      symbol: "$",
+    },
+    {
+      currency: "EUR",
+      symbol: "€",
+    },
+    {
+      currency: "GBP",
+      symbol: "£",
+    },
+    {
+      currency: "RUB",
+      symbol: "₽",
+    },
+  ]);
 
   const [userDropdownOpen, setUserDropdownOpen] = React.useState(false);
   const userOpen = Boolean(userDropdownOpen);
@@ -46,8 +62,8 @@ export default function Header() {
     return (
       <AppBar
         position="static"
-        color="default"
-        elevation={0}
+        color="secondary"
+        enableColorOnDark
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
       >
         <Toolbar sx={{ flexWrap: "wrap" }}>
@@ -73,7 +89,10 @@ export default function Header() {
     return (
       <AppBar
         position="static"
-        color="default"
+        style={{
+          backgroundColor: "#302f35",
+        }}
+        enableColorOnDark
         elevation={0}
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
       >
@@ -84,14 +103,25 @@ export default function Header() {
             </Link>
           </Typography>
           <div>
-            <IconButton
+            <Button
+              id="demo-customized-button"
+              aria-controls={addOpen ? "demo-customized-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={addOpen ? "true" : undefined}
+              variant="contained"
+              disableElevation
+              onClick={handleAddDropdownClick}
+            >
+              {user.selectedCurrency.currency}
+            </Button>
+            {/* <IconButton
               onClick={handleAddDropdownClick}
               aria-controls={addOpen ? "add-menu" : undefined}
               aria-haspopup="true"
               aria-expanded={addOpen ? "true" : undefined}
             >
               <AddIcon />
-            </IconButton>
+            </IconButton> */}
             <Menu
               id="add-menu"
               anchorEl={addDropdownOpen}
@@ -100,6 +130,7 @@ export default function Header() {
               PaperProps={{
                 elevation: 0,
                 sx: {
+                  backgroundColor: "#302f35",
                   overflow: "visible",
                   filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
                   mt: 1.5,
@@ -117,7 +148,7 @@ export default function Header() {
                     right: 14,
                     width: 10,
                     height: 10,
-                    bgcolor: "background.paper",
+                    bgcolor: "#302f35",
                     transform: "translateY(-50%) rotate(45deg)",
                     zIndex: 0,
                   },
@@ -125,14 +156,12 @@ export default function Header() {
               }}
               transformOrigin={{ horizontal: "right", vertical: "top" }}
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-              MenuListProps={{
-                "aria-labelledby": "add-button",
-              }}
             >
-              <MenuItem onClick={handleUserDropdownCloseClick}>
-                Create a new Course
-              </MenuItem>
-              <MenuItem onClick={runCode}>Run Code</MenuItem>
+              {currencyList.map((currency) => (
+                <MenuItem key={currency.currency}>
+                  <Typography variant="body2">{currency.currency}</Typography>
+                </MenuItem>
+              ))}
             </Menu>
 
             <IconButton

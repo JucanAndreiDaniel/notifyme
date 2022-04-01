@@ -45,7 +45,13 @@ export default function useAuth() {
         password,
       })
       .then((response) => {
-        setUserContext(response.data.user);
+        var tempUser = response.data.user;
+          tempUser.selectedCurrency = {
+            currency: "USD",
+            symbol: "$",
+          };
+          setUser(tempUser);
+        setUserContext(tempUser);
         localStorage.setItem("token", response.data.access_token);
       })
       .catch((err) => {
