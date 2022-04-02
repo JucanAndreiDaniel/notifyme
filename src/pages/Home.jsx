@@ -46,7 +46,7 @@ export default function Home() {
 
   React.useEffect(() => {
     axios
-      .get(pathString + "/old/coins", {
+      .get(pathString + "/coins", {
         params: {
           currency: "usd",
           limit: 15,

@@ -9,6 +9,7 @@ import PrivateRoute from './pages/PrivateRoute';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
+import NotificationTab from './pages/NotificationTab'
 import NotFound from './pages/NotFound';
 import useFindUser from './hooks/useFindUser';
 
@@ -45,6 +46,7 @@ function App() {
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
             <PrivateRoute exact path="/" component={Home} />
+            <PrivateRoute exact path="/notifications" component={NotificationTab} />
             <Route component={NotFound} />
           </Switch>
         </UserContext.Provider>
