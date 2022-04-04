@@ -67,7 +67,9 @@ export default function Header() {
     return (
       <AppBar
         position="static"
-        color="secondary"
+        style={{
+          backgroundColor: "#302f35",
+        }}
         enableColorOnDark
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
       >
