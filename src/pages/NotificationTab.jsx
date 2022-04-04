@@ -5,7 +5,7 @@ import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import NotiCard from "../components/NotiCard";
 import { getNotifications } from "../hooks/notification";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import NotiSaveModal from "../components/NotiSaveModal";
@@ -53,7 +53,13 @@ export default function NotificationTab() {
   return (
     <React.Fragment>
       {/* Line Below to make the page grey color */}
-      <NotiSaveModal open={open} setOpen={setOpen} favs={favs} setReload={setReload} reload={reload}/>
+      <NotiSaveModal
+        open={open}
+        setOpen={setOpen}
+        favs={favs}
+        setReload={setReload}
+        reload={reload}
+      />
       <CssBaseline />
       <Header />
       <Container
@@ -62,15 +68,28 @@ export default function NotificationTab() {
         component="main"
         sx={{ pt: 8, pb: 6 }}
       >
-        <Grid container>
+        <Grid
+          container
+          direction="row"
+          justifyContent={notifications.length > 0 ? "flex-start" : "center"}
+          alignItems="center"
+          spacing={2}
+        >
           {notifications.length > 0 ? (
             notifications?.map((noti, k) => (
               <Grid item>
-                <NotiCard noti={noti} key={noti?.id} />
+                <NotiCard
+                  noti={noti}
+                  key={noti?.id}
+                  reload={reload}
+                  setReload={setReload}
+                />
               </Grid>
             ))
           ) : (
-            <p>No notifications to show</p>
+            <Grid item>
+              <Typography>No notifications to show</Typography>
+            </Grid>
           )}
         </Grid>
         <Fab

@@ -12,14 +12,22 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import NotificationModal from "../components/NotificationModal";
+import { deleteNotification } from "../hooks/notification";
 
-const PostCard = ({ noti, key }) => {
+const PostCard = ({ noti, key, reload, setReload }) => {
   const [checked, setChecked] = React.useState(noti?.enabled);
   const [open, setOpen] = React.useState(false);
 
   const handleChange = (e) => {
     setChecked(e.target.checked);
   };
+
+  const handleDelete = () =>{
+    var formdata = new FormData();
+    formdata.append("id",noti.id);
+    deleteNotification(formdata);
+    setReload(!reload);
+  }
 
   return (
     <>
@@ -71,7 +79,7 @@ const PostCard = ({ noti, key }) => {
                 >
                   <EditIcon fontSize="inherit" />
                 </IconButton>
-                <IconButton aria-label="delete" size="large" color="error">
+                <IconButton onClick={handleDelete} aria-label="delete" size="large" color="error">
                   <DeleteIcon fontSize="inherit" />
                 </IconButton>
               </CardActions>

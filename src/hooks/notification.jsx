@@ -36,3 +36,15 @@ export const addNotification = async (notification) => {
     throw err;
   }
 };
+
+export const deleteNotification = async (id) => {
+  try {
+    return await axios.post(pathString + `/notifications/delete`, id, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
+};
