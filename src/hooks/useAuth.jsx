@@ -23,8 +23,8 @@ export default function useAuth() {
       .post(pathString + "/api/registration/", {
         username,
         email,
-        password,
-        passwordConfirm,
+        password1:password,
+        password2:passwordConfirm,
       })
       .then((response) => {
         setUserContext(response.data.user);
