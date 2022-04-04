@@ -6,25 +6,52 @@ import CssBaseline from "@mui/material/CssBaseline";
 import NotiCard from "../components/NotiCard";
 import { getNotifications } from "../hooks/notification";
 import { Grid } from "@mui/material";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import NotiSaveModal from "../components/NotiSaveModal";
+import { getFavoriteCoins } from "../hooks/useFavorite";
 
 export default function NotificationTab() {
   const [notifications, setNotifications] = useState([]);
+
+  const [open,setOpen] = useState(false);
+  const [favs,setFavs] = useState([{coin_id:""}]);
+  const handleClose = () => setOpen(false);
+
+  const style = {
+    margin: 0,
+    top: 'auto',
+    right: 20,
+    bottom: 20,
+    left: 'auto',
+    position: 'fixed',
+};
 
   useEffect(() => {
     getNotifications()
       .then((res) => {
         setNotifications(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
         setNotifications([]);
       });
+      getFavoriteCoins()
+        .then((res) => {
+          setFavs(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          setFavs({});
+        });
+        console.log(favs);
   }, []);
+
 
   return (
     <React.Fragment>
       {/* Line Below to make the page grey color */}
+      <NotiSaveModal open={open} setOpen={setOpen} favs={favs}></NotiSaveModal>
       <CssBaseline />
       <Header />
       <Container
@@ -44,6 +71,9 @@ export default function NotificationTab() {
             <p>No notifications to show</p>
           )}
         </Grid>
+        <Fab onClick={() => setOpen(true)} style={style} color="primary" aria-label="add">
+          <AddIcon />
+        </Fab>
       </Container>
     </React.Fragment>
   );
