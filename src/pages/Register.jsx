@@ -22,7 +22,7 @@ export default function Register() {
     initialValues: {
       email: "",
       username: "",
-      password: "",
+      password1: "",
       passwordConfirm: "",
     },
   });
@@ -117,7 +117,9 @@ export default function Register() {
               </Button>
               <Grid container>
                 <Grid item>
-                  <Link to="/login">{"Already have an account? Sign In"}</Link>
+                  <Link to="/login" style={{ color: "lightgrey" }}>
+                    {"Already have an account? Sign In"}
+                  </Link>
                 </Grid>
               </Grid>
             </Box>
