@@ -1,14 +1,12 @@
 import React from "react";
-import axios from "axios";
 
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
-import Typography from "@mui/material/Typography";
 
 import CryptoTable from "../components/CryptoTable";
+import { getCoins } from "../hooks/useCoins";
 import Header from "../sections/Header";
-import pathString from "../PathString";
 
 export default function Home() {
   const columnsCrypto = React.useMemo(
@@ -45,15 +43,13 @@ export default function Home() {
   const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
-    axios
-      .get(pathString + "/coins", {
-        params: {
-          currency: "usd",
-          limit: 15,
-        },
-      })
+    getCoins()
       .then((res) => {
         setData(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
