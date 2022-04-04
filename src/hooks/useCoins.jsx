@@ -16,7 +16,7 @@ export const getCoins = async () => {
 
 export const getFavoriteCoins = async () => {
   try {
-    return axios.get(pathString + "/coins/favorites", {
+    return axios.get(pathString + "/favorites", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },

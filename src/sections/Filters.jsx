@@ -18,9 +18,10 @@ export default function Filters(props) {
         <Button
           variant="contained"
           color="primary"
-          // size="large"
           style={{ marginLeft: 10 }}
-          onClick={props.handleOpen}
+          onClick={() => {
+            props.setOpen(true);
+          }}
         >
           Favorite
         </Button>

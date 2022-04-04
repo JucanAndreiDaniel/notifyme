@@ -1,6 +1,7 @@
 import React from "react";
 
 import Grid from "@mui/material/Grid";
+import { IconButton } from "@mui/material";
 import MaUTable from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -14,7 +15,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { useTable } from "react-table";
 
 import Filters from "../sections/Filters";
-import { IconButton } from "@mui/material";
+import FavoriteModal from "../components/FavoriteModal";
 
 const CryptoCustomCell = ({
   value: initialValue,
@@ -81,40 +82,44 @@ export default function CryptoTable({ columns, data }) {
     defaultColumn,
   });
   const [name, setName] = React.useState("");
+  const [open, setOpen] = React.useState(false);
 
   // Render the UI for your table
   return (
-    <TableContainer component={Paper}>
-      <Filters name={name} setName={setName} />
-      <MaUTable {...getTableProps()}>
-        <TableHead>
-          {headerGroups.map((headerGroup) => (
-            <TableRow {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <TableCell {...column.getHeaderProps()}>
-                  {column.render("Header")}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableHead>
-        <TableBody>
-          {rows.map((row, i) => {
-            prepareRow(row);
-            return (
-              <TableRow {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <TableCell {...cell.getCellProps()}>
-                      {cell.render("Cell")}
-                    </TableCell>
-                  );
-                })}
+    <>
+      <FavoriteModal open={open} setOpen={setOpen}  />
+      <TableContainer component={Paper}>
+        <Filters name={name} setName={setName} setOpen={setOpen} />
+        <MaUTable {...getTableProps()}>
+          <TableHead>
+            {headerGroups.map((headerGroup) => (
+              <TableRow {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <TableCell {...column.getHeaderProps()}>
+                    {column.render("Header")}
+                  </TableCell>
+                ))}
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </MaUTable>
-    </TableContainer>
+            ))}
+          </TableHead>
+          <TableBody>
+            {rows.map((row, i) => {
+              prepareRow(row);
+              return (
+                <TableRow {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <TableCell {...cell.getCellProps()}>
+                        {cell.render("Cell")}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </MaUTable>
+      </TableContainer>
+    </>
   );
 }
