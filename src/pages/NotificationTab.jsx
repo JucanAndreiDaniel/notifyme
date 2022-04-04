@@ -14,20 +14,20 @@ import { getFavoriteCoins } from "../hooks/useFavorite";
 export default function NotificationTab() {
   const [notifications, setNotifications] = useState([]);
 
-  const [open,setOpen] = useState(false);
-  const [favs,setFavs] = useState([{coin_id:""}]);
-  const handleClose = () => setOpen(false);
+  const [open, setOpen] = useState(false);
+  const [favs, setFavs] = useState([{ coin_id: "" }]);
+  const [reload, setReload] = useState(false);
 
   const style = {
     margin: 0,
-    top: 'auto',
+    top: "auto",
     right: 20,
     bottom: 20,
-    left: 'auto',
-    position: 'fixed',
-};
+    left: "auto",
+    position: "fixed",
+  };
 
-  useEffect(() => {
+  React.useEffect(() => {
     getNotifications()
       .then((res) => {
         setNotifications(res.data);
@@ -36,22 +36,24 @@ export default function NotificationTab() {
         console.log(err);
         setNotifications([]);
       });
-      getFavoriteCoins()
-        .then((res) => {
-          setFavs(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-          setFavs({});
-        });
-        console.log(favs);
-  }, []);
+  }, [reload]);
 
+  useEffect(() => {
+    getFavoriteCoins()
+      .then((res) => {
+        setFavs(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        setFavs({});
+      });
+    console.log(favs);
+  }, []);
 
   return (
     <React.Fragment>
       {/* Line Below to make the page grey color */}
-      <NotiSaveModal open={open} setOpen={setOpen} favs={favs}></NotiSaveModal>
+      <NotiSaveModal open={open} setOpen={setOpen} favs={favs} setReload={setReload} reload={reload}/>
       <CssBaseline />
       <Header />
       <Container
@@ -71,7 +73,12 @@ export default function NotificationTab() {
             <p>No notifications to show</p>
           )}
         </Grid>
-        <Fab onClick={() => setOpen(true)} style={style} color="primary" aria-label="add">
+        <Fab
+          onClick={() => setOpen(true)}
+          style={style}
+          color="primary"
+          aria-label="add"
+        >
           <AddIcon />
         </Fab>
       </Container>

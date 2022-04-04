@@ -17,7 +17,7 @@ import { FormControlLabel } from "@mui/material";
 import { addNotification } from "../hooks/notification";
 import { useHistory } from "react-router";
 
-const NotiSaveModal = ({ open, setOpen,favs }) => {
+const NotiSaveModal = ({ open, setOpen, favs, setReload, reload }) => {
   const options = [
     {
       value: "bigger",
@@ -45,10 +45,9 @@ const NotiSaveModal = ({ open, setOpen,favs }) => {
   const [value, setValue] = React.useState(0);
   const [check, setCheck] = React.useState(false);
   const [favOption, setFavOption] = React.useState();
-  const [id,setId] = React.useState(0);
+  const [id, setId] = React.useState(0);
 
   const handleClose = () => setOpen(false);
-
 
   const handleChange = (e) => {
     setOption(e.target.value);
@@ -60,19 +59,22 @@ const NotiSaveModal = ({ open, setOpen,favs }) => {
 
   const handleChangeFav = (e) => {
     setFavOption(e.target.value);
-    setValue(favs.find((favourite)=>{return favourite.coin_id == e.target.value}).current);
+    setValue(
+      favs.find((favourite) => {
+        return favourite.coin_id == e.target.value;
+      }).current
+    );
   };
 
   const handleSave = () => {
     var notificare = new FormData();
-    notificare.append("crypto_id",favOption);
-    notificare.append("option",option);
-    notificare.append("value",value);
-    notificare.append("viamail",check);
+    notificare.append("crypto_id", favOption);
+    notificare.append("option", option);
+    notificare.append("value", value);
+    notificare.append("viamail", check);
     addNotification(notificare);
     setOpen(false);
-
-    history.go('/notifications');
+    setReload(!reload);
   };
 
   React.useEffect(() => {
@@ -104,7 +106,7 @@ const NotiSaveModal = ({ open, setOpen,favs }) => {
             />
           </Grid> */}
           <Grid item>
-            <FormControl margin='dense' fullWidth>
+            <FormControl margin="dense" fullWidth>
               <InputLabel id="select-fav-label">Coin</InputLabel>
               <Select
                 labelId="select-fav-label"
@@ -114,7 +116,7 @@ const NotiSaveModal = ({ open, setOpen,favs }) => {
                 label="fav"
                 onChange={handleChangeFav}
               >
-                {favs.map((fav,id) => (
+                {favs.map((fav, id) => (
                   <MenuItem key={id} value={fav.coin_id}>
                     {fav.name}
                   </MenuItem>
