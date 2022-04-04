@@ -14,6 +14,8 @@ import Button from "@mui/material/Button";
 import { Checkbox } from "@mui/material";
 import { FormGroup } from "@mui/material";
 import { FormControlLabel } from "@mui/material";
+import { addNotification } from "../hooks/notification";
+import { useHistory } from "react-router";
 
 const NotiSaveModal = ({ open, setOpen,favs }) => {
   const options = [
@@ -38,12 +40,12 @@ const NotiSaveModal = ({ open, setOpen,favs }) => {
       label: "Decrease with Percentage",
     },
   ];
+  const history = useHistory();
   const [option, setOption] = React.useState("bigger");
   const [value, setValue] = React.useState(0);
   const [check, setCheck] = React.useState(false);
   const [favOption, setFavOption] = React.useState();
   const [id,setId] = React.useState(0);
-
 
   const handleClose = () => setOpen(false);
 
@@ -62,8 +64,15 @@ const NotiSaveModal = ({ open, setOpen,favs }) => {
   };
 
   const handleSave = () => {
-    // axios.post(pathString + "/api/notification/update", noti);
+    var notificare = new FormData();
+    notificare.append("crypto_id",favOption);
+    notificare.append("option",option);
+    notificare.append("value",value);
+    notificare.append("viamail",check);
+    addNotification(notificare);
     setOpen(false);
+
+    history.go('/notifications');
   };
 
   React.useEffect(() => {

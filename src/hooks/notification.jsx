@@ -24,3 +24,15 @@ export const setNotifications = async (notification) => {
     throw err;
   }
 };
+
+export const addNotification = async (notification) => {
+  try {
+    return await axios.post(pathString + `/notifications/create`, notification, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
+};
