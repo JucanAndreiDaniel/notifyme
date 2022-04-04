@@ -13,15 +13,3 @@ export const getCoins = async () => {
     throw err;
   }
 };
-
-export const getFavoriteCoins = async () => {
-  try {
-    return axios.get(pathString + "/favorites", {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    });
-  } catch (err) {
-    throw err;
-  }
-};

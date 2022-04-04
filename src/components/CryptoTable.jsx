@@ -16,6 +16,7 @@ import { useTable } from "react-table";
 
 import Filters from "../sections/Filters";
 import FavoriteModal from "../components/FavoriteModal";
+import { getFavoriteCoins } from "../hooks/useFavorite";
 
 const CryptoCustomCell = ({
   value: initialValue,
@@ -83,13 +84,23 @@ export default function CryptoTable({ columns, data }) {
   });
   const [name, setName] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [favs, setFavs] = React.useState([]);
+
+  const handleOpen = () => {
+    setOpen(true);
+    const getFavs = async () => {
+      const res = await getFavoriteCoins();
+      setFavs(res.data);
+    };
+    getFavs();
+  };
 
   // Render the UI for your table
   return (
     <>
-      <FavoriteModal open={open} setOpen={setOpen}  />
+      <FavoriteModal open={open} setOpen={setOpen} favs={favs} />
       <TableContainer component={Paper}>
-        <Filters name={name} setName={setName} setOpen={setOpen} />
+        <Filters name={name} setName={setName} setOpen={handleOpen} />
         <MaUTable {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (

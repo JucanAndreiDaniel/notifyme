@@ -15,19 +15,8 @@ import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 
-import { getFavoriteCoins } from "../hooks/useCoins";
-
-const FavoriteModal = ({ open, setOpen }) => {
+const FavoriteModal = ({ open, setOpen, favs }) => {
   const handleClose = () => setOpen(false);
-  const [favs, setFavs] = React.useState([]);
-
-  React.useEffect(() => {
-    const getFavs = async () => {
-      const res = await getFavoriteCoins();
-      setFavs(res.data);
-    };
-    getFavs();
-  }, []);
 
   return (
     <Dialog maxWidth="sm" fullWidth={true} open={open} onClose={handleClose}>
