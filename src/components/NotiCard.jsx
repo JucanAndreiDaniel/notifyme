@@ -12,14 +12,19 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import NotificationModal from "../components/NotificationModal";
-import { deleteNotification } from "../hooks/notification";
+import { deleteNotification,modifyNotification } from "../hooks/notification";
 
 const PostCard = ({ noti, key, reload, setReload }) => {
   const [checked, setChecked] = React.useState(noti?.enabled);
   const [open, setOpen] = React.useState(false);
 
-  const handleChange = (e) => {
+  const handleEnable = (e) => { 
     setChecked(e.target.checked);
+    var formdata = new FormData();
+    formdata.append("crypto_id",noti.coin_id);
+    formdata.append("state",e.target.checked);
+    modifyNotification(formdata);
+    setReload(!reload);
   };
 
   const handleDelete = () =>{
@@ -67,7 +72,7 @@ const PostCard = ({ noti, key, reload, setReload }) => {
                 <Typography>On/Off</Typography>
                 <Switch
                   checked={checked}
-                  onChange={handleChange}
+                  onChange={handleEnable}
                   inputProps={{ "aria-label": "controlled" }}
                 />
                 <IconButton

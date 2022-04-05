@@ -48,3 +48,15 @@ export const deleteNotification = async (id) => {
     throw err;
   }
 };
+
+export const modifyNotification = async (state) => {
+  try {
+    return await axios.post(pathString + `/notifications/change`, state, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
+};
