@@ -8,6 +8,7 @@ import { UserContext } from './hooks/UserContext';
 import PrivateRoute from './pages/PrivateRoute';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import Swagger from './pages/Swagger';
 import Home from './pages/Home';
 import NotificationTab from './pages/NotificationTab'
 import NotFound from './pages/NotFound';
@@ -45,6 +46,7 @@ function App() {
           <Switch>
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
+            <Route path="/swagger" component={Swagger} />
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/notifications" component={NotificationTab} />
             <Route component={NotFound} />
