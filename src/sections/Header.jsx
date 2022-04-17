@@ -28,6 +28,11 @@ export default function Header() {
     history.push("/swagger");
   };
 
+  const handleNewsClick = () => {
+    history.push("/news");
+  };
+
+
   const currencyList = [
     {
       currency: "USD",
@@ -206,6 +211,9 @@ export default function Header() {
             >
               <MenuItem onClick={handleNotificationClick}>
                 Notifications
+              </MenuItem>
+              <MenuItem onClick={handleNewsClick}>
+                News
               </MenuItem>
               <MenuItem onClick={swaggerRedirect}>Swagger API</MenuItem>
               <MenuItem onClick={logoutUser}>Logout</MenuItem>

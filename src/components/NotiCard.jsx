@@ -12,7 +12,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import NotificationModal from "../components/NotificationModal";
-import { deleteNotification,modifyNotification } from "../hooks/notification";
+import { addNotification, deleteNotification } from "../hooks/notification";
 
 const PostCard = ({ noti, key, reload, setReload }) => {
   const [checked, setChecked] = React.useState(noti?.enabled);
@@ -23,20 +23,22 @@ const PostCard = ({ noti, key, reload, setReload }) => {
     var formdata = new FormData();
     formdata.append("crypto_id",noti.coin_id);
     formdata.append("state",e.target.checked);
-    modifyNotification(formdata);
+    formdata.append("option", noti.value_type);
+    formdata.append("value", noti.final_value);
+    formdata.append("viamail", noti.check);
+    formdata.append("currency","usd");
+    addNotification(formdata);
     setReload(!reload);
   };
 
   const handleDelete = () =>{
-    var formdata = new FormData();
-    formdata.append("id",noti.id);
-    deleteNotification(formdata);
+    deleteNotification(noti.coin_id);
     setReload(!reload);
   }
 
   return (
     <>
-      <NotificationModal open={open} setOpen={setOpen} noti={noti} />
+      <NotificationModal open={open} setOpen={setOpen} noti={noti} reload={reload} setReload={setReload} />
 
       <Container key={key}>
         <Card>

@@ -1,5 +1,4 @@
 import React from "react";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -16,8 +15,10 @@ import { CardMedia } from "@mui/material";
 import { Checkbox } from "@mui/material";
 import { FormGroup } from "@mui/material";
 import { FormControlLabel } from "@mui/material";
+import { useHistory } from "react-router";
+import { addNotification } from "../hooks/notification";
 
-const NotificationModal = ({ open, setOpen, noti }) => {
+const NotificationModal = ({ open, setOpen, noti, setReload, reload }) => {
   const options = [
     {
       value: "bigger",
@@ -41,6 +42,7 @@ const NotificationModal = ({ open, setOpen, noti }) => {
     },
   ];
 
+  const history = useHistory();
   const handleClose = () => setOpen(false);
   const [option, setOption] = React.useState("bigger");
   const [value, setValue] = React.useState(0);
@@ -49,12 +51,19 @@ const NotificationModal = ({ open, setOpen, noti }) => {
   const handleChange = (e) => {
     setOption(e.target.value);
   };
-  const handleSave = () => {
-    noti.setOption(option);
-    noti.setValue(value);
-    noti.setCheck(check);
-    // axios.post(pathString + "/api/notification/update", noti);
+  const handleChangeValue = (e) => {
+    setValue(e.target.value);
+  };
+  const handleSave = (e) => {
+    var notificare = new FormData();
+    notificare.append("crypto_id", noti?.coin_id);
+    notificare.append("option", option);
+    notificare.append("value", value);
+    notificare.append("viamail", check);
+    notificare.append("currency","usd");
+    addNotification(notificare);
     setOpen(false);
+    setReload(!reload);
   };
 
   return (
@@ -88,6 +97,7 @@ const NotificationModal = ({ open, setOpen, noti }) => {
               value={value}
               type="number"
               variant="outlined"
+              onChange={handleChangeValue}
             />
           </Grid>
           <Grid item>

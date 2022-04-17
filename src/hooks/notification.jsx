@@ -27,7 +27,7 @@ export const setNotifications = async (notification) => {
 
 export const addNotification = async (notification) => {
   try {
-    return await axios.post(pathString + `/notifications/create`, notification, {
+    return await axios.put(pathString + `/notifications/`, notification, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
@@ -39,9 +39,12 @@ export const addNotification = async (notification) => {
 
 export const deleteNotification = async (id) => {
   try {
-    return await axios.post(pathString + `/notifications/delete`, id, {
+    return await axios.delete(pathString + `/notifications/`, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      data: {
+        "crypto_id": id,
       },
     });
   } catch (err) {
@@ -51,7 +54,7 @@ export const deleteNotification = async (id) => {
 
 export const modifyNotification = async (state) => {
   try {
-    return await axios.post(pathString + `/notifications/change`, state, {
+    return await axios.put(pathString + `/notifications/`, state, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },

@@ -44,8 +44,7 @@ const NotiSaveModal = ({ open, setOpen, favs, setReload, reload }) => {
   const [option, setOption] = React.useState("bigger");
   const [value, setValue] = React.useState(0);
   const [check, setCheck] = React.useState(false);
-  const [favOption, setFavOption] = React.useState();
-  const [id, setId] = React.useState(0);
+  const [favOption, setFavOption] = React.useState({});
 
   const handleClose = () => setOpen(false);
 
@@ -68,10 +67,13 @@ const NotiSaveModal = ({ open, setOpen, favs, setReload, reload }) => {
 
   const handleSave = () => {
     var notificare = new FormData();
-    notificare.append("crypto_id", favOption);
+    const va = favs.find(elem => favOption === elem.coin_id);
+    notificare.append("crypto_id", va.id)
+    // notificare.append("crypto_id", favOption);
     notificare.append("option", option);
     notificare.append("value", value);
     notificare.append("viamail", check);
+    notificare.append("currency","usd");
     addNotification(notificare);
     setOpen(false);
     setReload(!reload);
