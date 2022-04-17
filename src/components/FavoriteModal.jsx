@@ -44,7 +44,6 @@ const FavoriteModal = ({ open, setOpen, favs }) => {
                 </TableCell>
               </TableRow>
             </TableHead>
-
             <TableBody>
               {favs.map((fav) => (
                 <TableRow key={fav.id}>

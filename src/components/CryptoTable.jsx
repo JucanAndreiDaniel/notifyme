@@ -1,7 +1,7 @@
 import React from "react";
 
 import Grid from "@mui/material/Grid";
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import MaUTable from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,11 +12,12 @@ import Paper from "@mui/material/Paper";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 
-import { useTable } from "react-table";
+import { useTable, usePagination } from "react-table";
 
 import Filters from "../sections/Filters";
 import FavoriteModal from "../components/FavoriteModal";
 import { getFavoriteCoins } from "../hooks/useFavorite";
+import { UserContext } from "../hooks/UserContext";
 
 const CryptoCustomCell = ({
   value: initialValue,
@@ -39,13 +40,11 @@ const CryptoCustomCell = ({
               color: "#ffc107",
             }}
             onClick={() => {
-              updateMyData(row.index, {
-                ...row.original,
-                starred: !row.original.starred,
-              });
+              console.log("Clicked");
+              updateMyData(row.index, "favorite", !row.original.favorite);
             }}
           >
-            {row.original.starred ? <StarIcon /> : <StarBorderIcon />}
+            {row.original.favorite ? <StarIcon /> : <StarBorderIcon />}
           </IconButton>
         </Grid>
         <Grid item>
@@ -76,12 +75,24 @@ const defaultColumn = {
   Cell: CryptoCustomCell,
 };
 
-export default function CryptoTable({ columns, data }) {
-  const { getTableProps, headerGroups, rows, prepareRow } = useTable({
-    columns,
-    data,
-    defaultColumn,
-  });
+export default function CryptoTable({
+  columns,
+  data,
+  updateMyData,
+  skipPageReset,
+}) {
+  const { getTableProps, headerGroups, rows, prepareRow } = useTable(
+    {
+      columns,
+      data,
+      defaultColumn,
+      autoResetPage: !skipPageReset,
+      updateMyData,
+    },
+    usePagination
+  );
+
+  const { user } = React.useContext(UserContext);
   const [name, setName] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [favs, setFavs] = React.useState([]);
@@ -89,13 +100,12 @@ export default function CryptoTable({ columns, data }) {
   const handleOpen = () => {
     setOpen(true);
     const getFavs = async () => {
-      const res = await getFavoriteCoins();
+      const res = await getFavoriteCoins(user);
       setFavs(res.data);
     };
     getFavs();
   };
 
-  // Render the UI for your table
   return (
     <>
       <FavoriteModal open={open} setOpen={setOpen} favs={favs} />

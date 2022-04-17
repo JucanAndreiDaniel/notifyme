@@ -15,10 +15,27 @@ export const getFavoriteCoins = async () => {
 
 export const setFavoriteCoins = async (coin) => {
   try {
-    return axios.post(pathString + "/favorites/", coin, {
+    var data = new FormData();
+    data.append("crypto_id", coin.id);
+    return axios.post(pathString + "/favorites/", data, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const deleteFavoriteCoins = async (coin) => {
+  try {
+    var data = new FormData();
+    data.append("crypto_id", coin.id);
+    return axios.delete(pathString + "/favorites/", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      data: data,
     });
   } catch (err) {
     throw err;
