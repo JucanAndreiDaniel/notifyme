@@ -16,7 +16,7 @@ import useLogout from "../hooks/useLogout";
 
 export default function Header() {
   const history = useHistory();
-  const { user } = React.useContext(UserContext);
+  const { user, setUser } = React.useContext(UserContext);
   const { logoutUser } = useLogout();
 
   // use history to navigate to notification page
@@ -24,7 +24,11 @@ export default function Header() {
     history.push("/notifications");
   };
 
-  const [currencyList, setCurrencyList] = React.useState([
+  const swaggerRedirect = () => {
+    history.push("/swagger");
+  };
+
+  const currencyList = [
     {
       currency: "USD",
       symbol: "$",
@@ -41,7 +45,7 @@ export default function Header() {
       currency: "RUB",
       symbol: "₽",
     },
-  ]);
+  ];
 
   const [userDropdownOpen, setUserDropdownOpen] = React.useState(false);
   const userOpen = Boolean(userDropdownOpen);
@@ -54,6 +58,13 @@ export default function Header() {
   };
   const handleUserDropdownCloseClick = () => {
     setUserDropdownOpen(null);
+  };
+
+  const handleCurrencyChange = (event) => {
+    var tempUser = user;
+    tempUser.currency = event.currentTarget.innerText;
+    setUser(tempUser);
+    setAddDropdownOpen(null);
   };
 
   const handleAddDropdownClick = (event) => {
@@ -119,16 +130,8 @@ export default function Header() {
               disableElevation
               onClick={handleAddDropdownClick}
             >
-              {user.selectedCurrency.currency}
+              {user.currency}
             </Button>
-            {/* <IconButton
-              onClick={handleAddDropdownClick}
-              aria-controls={addOpen ? "add-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={addOpen ? "true" : undefined}
-            >
-              <AddIcon />
-            </IconButton> */}
             <Menu
               id="add-menu"
               anchorEl={addDropdownOpen}
@@ -165,7 +168,11 @@ export default function Header() {
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
               {currencyList.map((currency) => (
-                <MenuItem key={currency.currency}>
+                <MenuItem
+                  key={currency.currency}
+                  value={currency.currency}
+                  onClick={handleCurrencyChange}
+                >
                   <Typography variant="body2">{currency.currency}</Typography>
                 </MenuItem>
               ))}
@@ -200,6 +207,7 @@ export default function Header() {
               <MenuItem onClick={handleNotificationClick}>
                 Notifications
               </MenuItem>
+              <MenuItem onClick={swaggerRedirect}>Swagger API</MenuItem>
               <MenuItem onClick={logoutUser}>Logout</MenuItem>
             </Menu>
           </div>

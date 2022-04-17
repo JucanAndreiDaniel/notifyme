@@ -16,10 +16,7 @@ export default function useFindUser() {
         })
         .then((res) => {
           var tempUser = res.data;
-          tempUser.selectedCurrency = {
-            currency: "USD",
-            symbol: "$",
-          };
+          tempUser.currency = "USD";
           setUser(tempUser);
           setLoading(false);
         })

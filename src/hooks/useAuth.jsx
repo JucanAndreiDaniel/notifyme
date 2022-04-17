@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+
 import { UserContext } from "./UserContext";
 import pathString from "../PathString";
 
@@ -17,17 +18,19 @@ export default function useAuth() {
 
   //register user
   const registerUser = async (data) => {
-    console.log(data);
     const { username, email, password, passwordConfirm } = data;
+
     return axios
       .post(pathString + "/api/registration/", {
         username,
         email,
-        password1:password,
-        password2:passwordConfirm,
+        password1: password,
+        password2: passwordConfirm,
       })
       .then((response) => {
-        setUserContext(response.data.user);
+        var tempUser = response.data.user;
+        tempUser.currency = "USD";
+        setUserContext(tempUser);
         //store token in local storage
         localStorage.setItem("token", response.data.access_token);
       })
@@ -39,6 +42,7 @@ export default function useAuth() {
   //login user
   const loginUser = async (data) => {
     const { username, password } = data;
+
     return axios
       .post(pathString + "/api/login/", {
         username,
@@ -46,11 +50,7 @@ export default function useAuth() {
       })
       .then((response) => {
         var tempUser = response.data.user;
-          tempUser.selectedCurrency = {
-            currency: "USD",
-            symbol: "$",
-          };
-          setUser(tempUser);
+        tempUser.currency = "USD";
         setUserContext(tempUser);
         localStorage.setItem("token", response.data.access_token);
       })
