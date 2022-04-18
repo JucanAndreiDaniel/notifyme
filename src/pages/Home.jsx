@@ -1,4 +1,5 @@
 import React from "react";
+import debounce from "lodash.debounce";
 
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -49,10 +50,13 @@ export default function Home() {
   const { user } = React.useContext(UserContext);
   const [data, setData] = React.useState([]);
   const [skipPageReset, setSkipPageReset] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [pageCount, setPageCount] = React.useState(0);
+  const [cryptoNumber, setCryptoNumber] = React.useState(0);
+  const [coinName, setCoinName] = React.useState("");
+
 
   const updateMyData = (rowIndex, columnId, value) => {
-    // We also turn on the flag to not reset the page
-    console.log("Try to update");
     setSkipPageReset(true);
     setData((old) =>
       old.map((row, index) => {
@@ -76,27 +80,34 @@ export default function Home() {
     }
   };
 
-  React.useEffect(() => {
-    console.log(user);
-    getCoins(user.currency).then((res) => {
-      getFavoriteCoins()
-        .then((favs) => {
-          const favsIds = favs.data.map((fav) => fav.id);
-          const newData = res.data.map((coin) => {
-            const fav = favsIds.includes(coin.id);
-            return {
-              ...coin,
-              favorite: fav,
-            };
+  const fetchData = React.useCallback(
+      debounce(
+        async ({ pageIndex, pageSize, coinName }) => {
+          setLoading(true);
+          getCoins(user.currency, pageIndex + 1, pageSize, coinName).then((res) => {
+            getFavoriteCoins()
+              .then((favs) => {
+                const favsIds = favs.data.map((fav) => fav.id);
+                const newData = res.data.coins.map((coin) => {
+                  const fav = favsIds.includes(coin.id);
+                  return {
+                    ...coin,
+                    favorite: fav,
+                  };
+                });
+                console.log(newData);
+                setData(newData);
+                setPageCount(parseInt(res.data.totalPages));
+                setCryptoNumber(res.data.total);
+                setLoading(false);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           });
-          console.log(newData);
-          setData(newData);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
-  }, [user]);
+        }, 250),
+    [user.currency]
+  );
 
   return (
     <React.Fragment>
@@ -116,6 +127,12 @@ export default function Home() {
           data={data}
           updateMyData={updateMyData}
           skipPageReset={skipPageReset}
+          fetchData={fetchData}
+          loading={loading}
+          pageCount={pageCount}
+          coinName={coinName}
+          setCoinName={setCoinName}
+          cryptoNumber={cryptoNumber}
         />
       </Container>
     </React.Fragment>

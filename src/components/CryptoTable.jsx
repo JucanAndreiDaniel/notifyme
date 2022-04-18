@@ -6,7 +6,9 @@ import MaUTable from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
+import TableFooter from "@mui/material/TableFooter";
 import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import StarIcon from "@mui/icons-material/Star";
@@ -16,6 +18,7 @@ import { useTable, usePagination } from "react-table";
 
 import Filters from "../sections/Filters";
 import FavoriteModal from "../components/FavoriteModal";
+import CryptoTablePaginationActions from "../components/CryptoTablePaginationActions";
 import { getFavoriteCoins } from "../hooks/useFavorite";
 import { UserContext } from "../hooks/UserContext";
 
@@ -80,20 +83,49 @@ export default function CryptoTable({
   data,
   updateMyData,
   skipPageReset,
+  fetchData,
+  loading,
+  cryptoNumber,
+  coinName,
+  setCoinName,
+  pageCount: controlledPageCount,
 }) {
-  const { getTableProps, headerGroups, rows, prepareRow } = useTable(
+  const {
+    getTableProps,
+    headerGroups,
+    prepareRow,
+    page,
+    gotoPage,
+    setPageSize,
+    // Get the state from the instance
+    state: { pageIndex, pageSize },
+  } = useTable(
     {
       columns,
       data,
       defaultColumn,
       autoResetPage: !skipPageReset,
       updateMyData,
+      initialState: { pageIndex: 0, pagesize: 25 },
+      manualPagination: true,
+      pageCount: controlledPageCount,
     },
     usePagination
   );
+  React.useEffect(() => {
+    fetchData({ pageIndex, pageSize, coinName });
+  }, [fetchData, pageIndex, pageSize, coinName]);
+
+  const handleChangePage = (event, newPage) => {
+    gotoPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setPageSize(Number(event.target.value));
+    handleChangePage(0);
+  };
 
   const { user } = React.useContext(UserContext);
-  const [name, setName] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [favs, setFavs] = React.useState([]);
 
@@ -110,7 +142,7 @@ export default function CryptoTable({
     <>
       <FavoriteModal open={open} setOpen={setOpen} favs={favs} />
       <TableContainer component={Paper}>
-        <Filters name={name} setName={setName} setOpen={handleOpen} />
+        <Filters name={coinName} setName={setCoinName} setOpen={handleOpen} />
         <MaUTable {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (
@@ -124,7 +156,7 @@ export default function CryptoTable({
             ))}
           </TableHead>
           <TableBody>
-            {rows.map((row, i) => {
+            {page.map((row, i) => {
               prepareRow(row);
               return (
                 <TableRow {...row.getRowProps()}>
@@ -139,6 +171,29 @@ export default function CryptoTable({
               );
             })}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[
+                  5,
+                  10,
+                  25,
+                  { label: "All", value: cryptoNumber },
+                ]}
+                colSpan={3}
+                count={parseInt(cryptoNumber)}
+                rowsPerPage={pageSize}
+                page={pageIndex}
+                SelectProps={{
+                  inputProps: { "aria-label": "rows per page" },
+                  native: true,
+                }}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                ActionsComponent={CryptoTablePaginationActions}
+              />
+            </TableRow>
+          </TableFooter>
         </MaUTable>
       </TableContainer>
     </>

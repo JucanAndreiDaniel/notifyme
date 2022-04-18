@@ -1,13 +1,15 @@
 import axios from "axios";
 import pathString from "../PathString";
 
-export const getCoins = async (currency) => {
+export const getCoins = async (currency,pageIndex,pageSize,coinName) => {
   try {
     console.log(currency)
     return axios.get(pathString + "/coins", {
       params: {
         currency: currency,
-        limit: 15,
+        query: coinName,
+        pageIndex: pageIndex,
+        pageSize: pageSize,
       },
     });
   } catch (err) {
