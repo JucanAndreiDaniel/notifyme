@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import Swagger from './pages/Swagger';
 import Home from './pages/Home';
 import NotificationTab from './pages/NotificationTab'
+import NewsTab from './pages/NewsTab';
 import NotFound from './pages/NotFound';
 import useFindUser from './hooks/useFindUser';
 
@@ -49,6 +50,7 @@ function App() {
             <Route path="/swagger" component={Swagger} />
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/notifications" component={NotificationTab} />
+            <PrivateRoute exact path="/news" component={NewsTab} />
             <Route component={NotFound} />
           </Switch>
         </UserContext.Provider>
