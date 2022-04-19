@@ -29,7 +29,7 @@ export default function useAuth() {
       })
       .then((response) => {
         var tempUser = response.data.user;
-        tempUser.currency = "USD";
+        tempUser.currency = "usd";
         setUserContext(tempUser);
         //store token in local storage
         localStorage.setItem("token", response.data.access_token);
@@ -50,7 +50,7 @@ export default function useAuth() {
       })
       .then((response) => {
         var tempUser = response.data.user;
-        tempUser.currency = "USD";
+        tempUser.currency = "usd";
         setUserContext(tempUser);
         localStorage.setItem("token", response.data.access_token);
       })

@@ -35,19 +35,19 @@ export default function Header() {
 
   const currencyList = [
     {
-      currency: "USD",
+      currency: "usd",
       symbol: "$",
     },
     {
-      currency: "EUR",
+      currency: "eur",
       symbol: "€",
     },
     {
-      currency: "GBP",
+      currency: "gbp",
       symbol: "£",
     },
     {
-      currency: "RUB",
+      currency: "rub",
       symbol: "₽",
     },
   ];
@@ -175,10 +175,10 @@ export default function Header() {
               {currencyList.map((currency) => (
                 <MenuItem
                   key={currency.currency}
-                  value={currency.currency}
+                  value={currency.currency.toLocaleUpperCase()}
                   onClick={handleCurrencyChange}
                 >
-                  <Typography variant="body2">{currency.currency}</Typography>
+                  <Typography variant="body2">{currency.currency.toLocaleUpperCase()}</Typography>
                 </MenuItem>
               ))}
             </Menu>
