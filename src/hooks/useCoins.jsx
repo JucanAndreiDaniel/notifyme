@@ -4,7 +4,7 @@ import pathString from "../PathString";
 export const getCoins = async (currency,pageIndex,pageSize,coinName) => {
   try {
     console.log(currency)
-    return axios.get(pathString + "/coins", {
+    return axios.get(pathString + "/coins/", {
       params: {
         currency: currency,
         query: coinName,

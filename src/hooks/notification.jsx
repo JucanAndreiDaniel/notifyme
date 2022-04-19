@@ -1,9 +1,9 @@
- import axios from "axios";
+import axios from "axios";
 import pathString from "../PathString";
 
 export const getNotifications = async () => {
   try {
-    return await axios.get(pathString + `/notifications`, {
+    return await axios.get(pathString + `/notifications/`, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
@@ -15,7 +15,7 @@ export const getNotifications = async () => {
 
 export const setNotifications = async (notification) => {
   try {
-    return await axios.post(pathString + `/notifications`, notification, {
+    return await axios.post(pathString + `/notifications/`, notification, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
@@ -44,7 +44,7 @@ export const deleteNotification = async (id) => {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
       data: {
-        "crypto_id": id,
+        crypto_id: id,
       },
     });
   } catch (err) {

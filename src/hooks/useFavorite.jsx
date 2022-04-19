@@ -3,7 +3,7 @@ import pathString from "../PathString";
 
 export const getFavoriteCoins = async () => {
   try {
-    return axios.get(pathString + "/favorites", {
+    return axios.get(pathString + "/favorites/", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
