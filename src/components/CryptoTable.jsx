@@ -43,7 +43,6 @@ const CryptoCustomCell = ({
               color: "#ffc107",
             }}
             onClick={() => {
-              console.log("Clicked");
               updateMyData(row.index, "favorite", !row.original.favorite);
             }}
           >

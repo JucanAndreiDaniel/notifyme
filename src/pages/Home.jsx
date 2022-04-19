@@ -95,7 +95,6 @@ export default function Home() {
                     favorite: fav,
                   };
                 });
-                console.log(newData);
                 setData(newData);
                 setPageCount(parseInt(res.data.totalPages));
                 setCryptoNumber(res.data.total);
