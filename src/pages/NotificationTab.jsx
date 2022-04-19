@@ -41,7 +41,12 @@ export default function NotificationTab() {
   useEffect(() => {
     getFavoriteCoins()
       .then((res) => {
-        setFavs(res.data);
+        if (res.data.length == 0 ) {
+          setFavs([{coin_id: ""}]);
+        }
+        else{
+          setFavs(res.data);
+        }
       })
       .catch((err) => {
         console.log(err);
