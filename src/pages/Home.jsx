@@ -6,7 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
 
 import CryptoTable from "../components/CryptoTable";
-import { getCoins } from "../hooks/useCoins";
+import { getCoins, getSparkline } from "../hooks/useCoins";
 import Header from "../sections/Header";
 import { UserContext } from "../hooks/UserContext";
 import {
@@ -22,6 +22,7 @@ export default function Home() {
         Header: "Name",
         accessor: "name",
         canFilter: true,
+        width:300,
       },
       {
         Header: "Symbol",
@@ -41,7 +42,8 @@ export default function Home() {
       },
       {
         Header: "Last 24 Hours",
-        accessor: "last_24h",
+        accessor: "sparkline",
+        width:200,
       },
     ],
     []
@@ -54,7 +56,6 @@ export default function Home() {
   const [pageCount, setPageCount] = React.useState(0);
   const [cryptoNumber, setCryptoNumber] = React.useState(0);
   const [coinName, setCoinName] = React.useState("");
-
 
   const updateMyData = (rowIndex, columnId, value) => {
     setSkipPageReset(true);
@@ -81,30 +82,37 @@ export default function Home() {
   };
 
   const fetchData = React.useCallback(
-      debounce(
-        async ({ pageIndex, pageSize, coinName }) => {
-          setLoading(true);
-          getCoins(user.currency, pageIndex + 1, pageSize, coinName).then((res) => {
-            getFavoriteCoins()
-              .then((favs) => {
-                const favsIds = favs.data.map((fav) => fav.id);
-                const newData = res.data.coins.map((coin) => {
-                  const fav = favsIds.includes(coin.id);
-                  return {
-                    ...coin,
-                    favorite: fav,
-                  };
+    debounce(async ({ pageIndex, pageSize, coinName }) => {
+      setLoading(true);
+      getCoins(user.currency, pageIndex + 1, pageSize, coinName).then((res) => {
+        getFavoriteCoins()
+          .then((favs) => {
+            const favsIds = favs.data.map((fav) => fav.id);
+            const newData = res.data.coins.map((coin) => {
+              const fav = favsIds.includes(coin.id);
+              return {
+                ...coin,
+                favorite: fav,
+              };
+            });
+            getSparkline(user.currency, pageIndex + 1, pageSize, coinName).then(
+              (sparklineResponse) => {
+                newData.forEach((coin) => {
+                  const sparkline = sparklineResponse.data.sparkline[coin.id];
+                  coin.sparkline = sparkline;
                 });
                 setData(newData);
-                setPageCount(parseInt(res.data.totalPages));
-                setCryptoNumber(res.data.total);
-                setLoading(false);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+              }
+            );
+            setPageCount(parseInt(res.data.totalPages));
+            setCryptoNumber(res.data.total);
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log(err);
           });
-        }, 250),
+      });
+    }, 250),
     [user.currency]
   );
 

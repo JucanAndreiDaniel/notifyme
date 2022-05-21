@@ -14,7 +14,9 @@ import Paper from "@mui/material/Paper";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 
-import { useTable, usePagination } from "react-table";
+import { Sparklines, SparklinesLine } from "react-sparklines";
+
+import { useTable, usePagination, useFlexLayout } from "react-table";
 
 import Filters from "../sections/Filters";
 import FavoriteModal from "../components/FavoriteModal";
@@ -36,6 +38,7 @@ const CryptoCustomCell = ({
         justifyContent="flex-start"
         alignItems="center"
         spacing={2}
+
       >
         <Grid item>
           <IconButton
@@ -70,11 +73,14 @@ const CryptoCustomCell = ({
       </Grid>
     );
   }
+  if (id === "sparkline") {
+    return (
+      <Sparklines data={row.original.sparkline}  height={28}>
+        <SparklinesLine color="#ffc107" />
+      </Sparklines>
+    );
+  }
   return <>{initialValue}</>;
-};
-
-const defaultColumn = {
-  Cell: CryptoCustomCell,
 };
 
 export default function CryptoTable({
@@ -89,6 +95,15 @@ export default function CryptoTable({
   setCoinName,
   pageCount: controlledPageCount,
 }) {
+  const defaultColumn = React.useMemo(
+    () => ({
+      Cell: CryptoCustomCell,
+      minWidth: 20,
+      width: 100,
+      maxWidth: 500,
+    }),
+    []
+  );
   const {
     getTableProps,
     headerGroups,
@@ -109,13 +124,14 @@ export default function CryptoTable({
       manualPagination: true,
       pageCount: controlledPageCount,
     },
-    usePagination
+    usePagination,
+    useFlexLayout
   );
   React.useEffect(() => {
     fetchData({ pageIndex, pageSize, coinName });
   }, [fetchData, pageIndex, pageSize, coinName]);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (_event, newPage) => {
     gotoPage(newPage);
   };
 
@@ -155,7 +171,7 @@ export default function CryptoTable({
             ))}
           </TableHead>
           <TableBody>
-            {page.map((row, i) => {
+            {page.map((row, _i) => {
               prepareRow(row);
               return (
                 <TableRow {...row.getRowProps()}>

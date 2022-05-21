@@ -16,3 +16,17 @@ export const getCoins = async (currency,pageIndex,pageSize,coinName) => {
     throw err;
   }
 };
+export const getSparkline = async (currency,pageIndex,pageSize,coinName) => {
+  try {
+    return axios.get(pathString + "/sparkline/", {
+      params: {
+        currency: currency,
+        query: coinName,
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
+};
