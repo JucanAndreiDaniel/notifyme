@@ -17,31 +17,74 @@ import { addNotification, deleteNotification } from "../hooks/notification";
 const PostCard = ({ noti, key, reload, setReload }) => {
   const [checked, setChecked] = React.useState(noti?.enabled);
   const [open, setOpen] = React.useState(false);
+  const [complete, setComplete] = React.useState(false);
 
-  const handleEnable = (e) => { 
+  const handleEnable = (e) => {
     setChecked(e.target.checked);
     var formdata = new FormData();
-    formdata.append("crypto_id",noti.coin_id);
-    formdata.append("state",e.target.checked);
+    formdata.append("crypto_id", noti.coin_id);
+    formdata.append("state", e.target.checked);
     formdata.append("option", noti.value_type);
     formdata.append("value", noti.final_value);
     formdata.append("viamail", noti.check);
-    formdata.append("currency","usd");
+    formdata.append("currency", "usd");
     addNotification(formdata);
     setReload(!reload);
   };
 
-  const handleDelete = () =>{
+  const handleDelete = () => {
     deleteNotification(noti.coin_id);
     setReload(!reload);
-  }
+  };
+
+  React.useEffect(() => {
+    var operator = noti.value_type;
+    switch (operator) {
+      case "bigger":
+        if (noti.final_value < noti.current) {
+          setComplete(true);
+        }
+        break;
+      case "lower":
+        if (noti.final_value > noti.current) {
+          setComplete(true);
+        }
+        break;
+      case "equal":
+        if (noti.final_value == noti.current) {
+          setComplete(true);
+        }
+        break;
+      case "g_perc":
+        if (noti.final_value < noti.current) {
+          setComplete(true);
+        }
+        break;
+      case "d_perc":
+        if (noti.final_value > noti.current) {
+          setComplete(true);
+        }
+        break;
+      default:
+        setComplete(false);
+        break;
+    }
+  }, []);
 
   return (
     <>
-      <NotificationModal open={open} setOpen={setOpen} noti={noti} reload={reload} setReload={setReload} />
+      <NotificationModal
+        open={open}
+        setOpen={setOpen}
+        noti={noti}
+        reload={reload}
+        setReload={setReload}
+      />
 
       <Container key={key}>
-        <Card>
+        <Card
+          style={complete ? { borderStyle: "solid", borderColor: "green" } : {}}
+        >
           <div
             style={{
               display: "flex",
@@ -86,7 +129,12 @@ const PostCard = ({ noti, key, reload, setReload }) => {
                 >
                   <EditIcon fontSize="inherit" />
                 </IconButton>
-                <IconButton onClick={handleDelete} aria-label="delete" size="large" color="error">
+                <IconButton
+                  onClick={handleDelete}
+                  aria-label="delete"
+                  size="large"
+                  color="error"
+                >
                   <DeleteIcon fontSize="inherit" />
                 </IconButton>
               </CardActions>

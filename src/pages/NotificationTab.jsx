@@ -10,6 +10,7 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import NotiSaveModal from "../components/NotiSaveModal";
 import { getFavoriteCoins } from "../hooks/useFavorite";
+import NotiToast from "../components/NotiToast";
 
 export default function NotificationTab() {
   const [notifications, setNotifications] = useState([]);
@@ -41,10 +42,9 @@ export default function NotificationTab() {
   useEffect(() => {
     getFavoriteCoins()
       .then((res) => {
-        if (res.data.length == 0 ) {
-          setFavs([{coin_id: ""}]);
-        }
-        else{
+        if (res.data.length == 0) {
+          setFavs([{ coin_id: "" }]);
+        } else {
           setFavs(res.data);
         }
       })
@@ -56,7 +56,7 @@ export default function NotificationTab() {
   }, []);
 
   return (
-    <React.Fragment>
+    <SnackbarProvider maxSnack={3}>
       {/* Line Below to make the page grey color */}
       <NotiSaveModal
         open={open}
@@ -73,6 +73,11 @@ export default function NotificationTab() {
         component="main"
         sx={{ pt: 8, pb: 6 }}
       >
+        {notifications.length > 0
+          ? notifications?.map((noti, k) => (
+              <NotiToast noti={noti} key={k}></NotiToast>
+            ))
+          : ""}
         <Grid
           container
           direction="row"
@@ -106,6 +111,6 @@ export default function NotificationTab() {
           <AddIcon />
         </Fab>
       </Container>
-    </React.Fragment>
+    </SnackbarProvider>
   );
 }
