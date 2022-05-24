@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import Button from "@mui/material/Button";
 import Header from "../sections/Header";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,6 +12,9 @@ import AddIcon from "@mui/icons-material/Add";
 import NotiSaveModal from "../components/NotiSaveModal";
 import { getFavoriteCoins } from "../hooks/useFavorite";
 import NotiToast from "../components/NotiToast";
+
+import { useSnackbar } from 'notistack';
+
 
 export default function NotificationTab() {
   const [notifications, setNotifications] = useState([]);
@@ -28,9 +32,39 @@ export default function NotificationTab() {
     position: "fixed",
   };
 
+  function checkType(noti) {
+    switch (noti.value_type) {
+      case "bigger":
+        return noti.current > noti.final_value;
+      case "lower":
+        return noti.current < noti.final_value;
+      case "equal":
+        return noti.current == noti.final_value;
+      case "g_perc":
+        return noti.current > noti.final_value;
+      case "l_perc":
+        return noti.current < noti.final_value;
+      default:
+        return "";
+    }
+  }
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const addToast = React.useCallback((noti, k) => {
+    enqueueSnackbar(`${noti.name} has reached the value of ${noti.current}`, {
+      variant: 'default',
+    });
+  }, [enqueueSnackbar, closeSnackbar]);
+
   React.useEffect(() => {
     getNotifications()
       .then((res) => {
+        res.data.map((noti, k) => {
+          if (checkType(noti)) {
+            addToast(noti, k);
+          }
+        });
         setNotifications(res.data);
       })
       .catch((err) => {
@@ -52,12 +86,10 @@ export default function NotificationTab() {
         console.log(err);
         setFavs({});
       });
-    console.log(favs);
   }, []);
 
   return (
-    <SnackbarProvider maxSnack={3}>
-      {/* Line Below to make the page grey color */}
+    <>
       <NotiSaveModal
         open={open}
         setOpen={setOpen}
@@ -73,11 +105,6 @@ export default function NotificationTab() {
         component="main"
         sx={{ pt: 8, pb: 6 }}
       >
-        {notifications.length > 0
-          ? notifications?.map((noti, k) => (
-              <NotiToast noti={noti} key={k}></NotiToast>
-            ))
-          : ""}
         <Grid
           container
           direction="row"
@@ -111,6 +138,6 @@ export default function NotificationTab() {
           <AddIcon />
         </Fab>
       </Container>
-    </SnackbarProvider>
+    </>
   );
 }

@@ -15,6 +15,9 @@ import NewsTab from './pages/NewsTab';
 import NotFound from './pages/NotFound';
 import useFindUser from './hooks/useFindUser';
 
+import { SnackbarProvider } from 'notistack';
+
+
 
 const theme = createTheme({
   palette: {
@@ -41,21 +44,24 @@ function App() {
     isLoading } = useFindUser();
 
   return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <UserContext.Provider value={{ user, setUser, isLoading }}>
-          <Switch>
-            <Route path="/register" component={Register} />
-            <Route path="/login" component={Login} />
-            <Route path="/swagger" component={Swagger} />
-            <PrivateRoute exact path="/" component={Home} />
-            <PrivateRoute exact path="/notifications" component={NotificationTab} />
-            <PrivateRoute exact path="/news" component={NewsTab} />
-            <Route component={NotFound} />
-          </Switch>
-        </UserContext.Provider>
-      </Router>
-    </ThemeProvider>
+    <SnackbarProvider maxSnack={3}>
+
+      <ThemeProvider theme={theme}>
+        <Router>
+          <UserContext.Provider value={{ user, setUser, isLoading }}>
+            <Switch>
+              <Route path="/register" component={Register} />
+              <Route path="/login" component={Login} />
+              <Route path="/swagger" component={Swagger} />
+              <PrivateRoute exact path="/" component={Home} />
+              <PrivateRoute exact path="/notifications" component={NotificationTab} />
+              <PrivateRoute exact path="/news" component={NewsTab} />
+              <Route component={NotFound} />
+            </Switch>
+          </UserContext.Provider>
+        </Router>
+      </ThemeProvider>
+    </SnackbarProvider>
   );
 }
 

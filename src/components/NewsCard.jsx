@@ -33,6 +33,11 @@ const NewsCard = ({ news }) => {
     setExpanded(!expanded);
   };
 
+  const stringDate = (date) => {
+    const d = new Date(date);
+    return d.toDateString();
+  }
+
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -76,7 +81,7 @@ const NewsCard = ({ news }) => {
         </Typography>
         <CardGroup style={{marginTop:10}}>
           <Typography>{news?.source_name}</Typography>
-          <Typography>{news?.published_at}</Typography>
+          <Typography>{stringDate(news?.published_at)}</Typography>
         </CardGroup>
 
         
